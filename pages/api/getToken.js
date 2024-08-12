@@ -1,13 +1,12 @@
-// pages/api/getToken.js
 export default async function handler(req, res) {
-    const {
-        method
-    } = req;
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Update this to your origin if needed
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    const { method } = req;
 
     if (method !== 'POST') {
-        return res.status(405).json({
-            error: 'Method not allowed'
-        });
+        return res.status(405).json({ error: 'Method not allowed' });
     }
 
     try {
@@ -25,15 +24,11 @@ export default async function handler(req, res) {
 
         const data = await response.json();
         if (response.ok) {
-            return res.status(200).json({
-                token: data.access_token
-            });
+            return res.status(200).json({ token: data.access_token });
         } else {
             return res.status(response.status).json(data);
         }
     } catch (error) {
-        return res.status(500).json({
-            error: 'Failed to fetch token'
-        });
+        return res.status(500).json({ error: 'Failed to fetch token' });
     }
 }
